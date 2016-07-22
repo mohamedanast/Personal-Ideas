@@ -19,7 +19,7 @@ namespace Ideas.DataAccess.BaseTypes
         /// <param name="orderBy"></param>
         /// <param name="includeProperties"></param>
         /// <returns></returns>
-        PagedResult<TEntity> GetByQuery(Expression<Func<TEntity, bool>> query = null, 
+        IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> query = null, 
                 Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "");
 
         TEntity GetFirst(Expression<Func<TEntity, bool>> predicate);

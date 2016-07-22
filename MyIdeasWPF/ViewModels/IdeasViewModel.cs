@@ -51,7 +51,7 @@ namespace Ideas.ViewModels
         {
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
             {
-                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != IdeaStatus.Archived ).Items.ToList();
+                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != (int)IdeaStatus.Archived ).ToList();
             }
         }
 

@@ -29,8 +29,9 @@ namespace Ideas.DataAccess.Entities
         [Column(TypeName = "datetime2")]
         public DateTime Modified { get; set; }
 
-        [Column(TypeName = "tinyint")]
-        public virtual IdeaStatus Status { get; set; }
+        [Column("Status", TypeName = "tinyint")]
+        public byte Status { get; set; }
+        //public IdeaStatus Status { get; set; }    // TODO: Why not able to use the status as enum? (Querying is not working) Retry?
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IdeaAttachment> IdeaAttachments { get; set; }

@@ -14,8 +14,8 @@ namespace Ideas.ViewModels
         {
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
             {
-                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status == IdeaStatus.Implemented || i.Status == IdeaStatus.OnImplementation,
-                    elts => elts.OrderByDescending(elt => elt.Created)).Items.ToList();
+                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status == (int)IdeaStatus.Implemented || i.Status == (int)IdeaStatus.OnImplementation,
+                    elts => elts.OrderByDescending(elt => elt.Created)).ToList();
             }
         }
     }

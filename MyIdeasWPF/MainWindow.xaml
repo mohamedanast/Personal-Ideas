@@ -13,13 +13,25 @@
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
             <local:DashboardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:IdeaViewModel}">
+            <local:IdeaView />
+        </DataTemplate>
     </Window.Resources>
     
     <DockPanel Name="MainDisp" LastChildFill="True">
         <ToolBar Name="MainToolBar" DockPanel.Dock="Top">
             <Menu>
-                <MenuItem Header="File"></MenuItem>
-                <MenuItem Header="Manage"></MenuItem>
+                <MenuItem Header="_File"></MenuItem>
+                <MenuItem Header="_Manage">
+                    <MenuItem Header="_Ideas">
+                        <MenuItem Header="_New Idea" Command="{Binding NewIdeaCommand}"></MenuItem>
+                        <MenuItem Header="View _All Ideas"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Tags">
+                        <MenuItem Header="_New Tag"></MenuItem>
+                        <MenuItem Header="View _All Tags"></MenuItem>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem Header="Help"></MenuItem>
             </Menu>
         </ToolBar>

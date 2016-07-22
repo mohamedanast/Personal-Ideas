@@ -26,10 +26,9 @@ namespace Ideas.DataAccess.Model
             return dbSet.Find(id);
         }
 
-        public PagedResult<TEntity> GetByQuery(Expression<Func<TEntity, bool>> query = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        public IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> query = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
         {
             IQueryable<TEntity> queryResult = dbSet;
-            int pageItemsCount = 20;
 
             //If there is a query, execute it against the dbset
             if (query != null)
@@ -45,12 +44,10 @@ namespace Ideas.DataAccess.Model
             
             if (orderBy != null)
             {
-                return new PagedResult<TEntity>(orderBy(queryResult).ToList(), pageItemsCount);
+                return orderBy(queryResult);
             }
-            else
-            {
-                return new PagedResult<TEntity>(queryResult.ToList(), pageItemsCount);
-            }
+
+            return queryResult;
         }
 
         public TEntity GetFirst(Expression<Func<TEntity, bool>> predicate)

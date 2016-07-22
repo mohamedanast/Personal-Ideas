@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Ideas.ViewModels
 {
     public class ViewModel : INotifyPropertyChanged
     {
+        private ICommand cancelCommand;
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -29,6 +31,22 @@ namespace Ideas.ViewModels
             if (TypeDescriptor.GetProperties(this)[propertyName] == null)        
                 throw new Exception("Invalid property name: " + propertyName);
         }
-        
+
+        public ICommand CancelCommand
+        {
+            get
+            {
+                if (cancelCommand == null)
+                    cancelCommand = new ActionCommand(p => CancelAction());
+
+                return cancelCommand;
+            }
+        }
+
+        protected virtual void CancelAction()
+        {
+            //TODO:
+            System.Windows.MessageBox.Show("Not implemented");
+        }
     }
 }

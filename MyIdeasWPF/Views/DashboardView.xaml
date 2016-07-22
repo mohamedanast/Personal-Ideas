@@ -13,7 +13,7 @@
         <DataTemplate DataType="{x:Type vm:IdeasViewModel}">
             <local:IdeasView />
         </DataTemplate>
-        <!--<DataTemplate DataType="{x:Type vm:IdeasViewModel}">
+        <!--<DataTemplate DataType="{x:Type vm:FruitfuldeasViewModel}">
             <local:IdeasView />
         </DataTemplate>-->
     </UserControl.Resources>
@@ -27,8 +27,18 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ContentControl Content="{Binding IdeasVM}" />
-        <ContentControl Content="{Binding FruifulIdeasVM}" Grid.Column="1" />
-        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding TestString}"></TextBlock>
+        <Border Margin="1" BorderThickness="5" BorderBrush="BlanchedAlmond">
+        <StackPanel>
+            <TextBlock Text="Recent Ideas"></TextBlock>
+            <ContentControl Margin="5" Content="{Binding IdeasVM}" />
+        </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Margin="1" BorderThickness="5" BorderBrush="BlanchedAlmond">
+            <StackPanel>
+                <TextBlock Text="Fruitful Ideas"></TextBlock>
+                <ContentControl Margin="5" Content="{Binding FruitfulIdeasVM}" />
+            </StackPanel>
+        </Border>
+        <TextBlock  Margin="1 5 5 1" Grid.Column="1" Grid.Row="1" Text="{Binding TestString}"></TextBlock>
     </Grid>
 </UserControl>

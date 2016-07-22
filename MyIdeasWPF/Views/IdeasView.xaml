@@ -17,7 +17,11 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <DataGrid ItemsSource="{Binding Ideas}">
+        <DataGrid ItemsSource="{Binding Ideas}" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Idea" Binding="{Binding Path=Title}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Created" Binding="{Binding Path=Created}" Width="Auto"></DataGridTextColumn>
+            </DataGrid.Columns>
         </DataGrid>
     </StackPanel>
 </UserControl>
