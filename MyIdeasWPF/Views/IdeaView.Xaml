@@ -8,6 +8,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance vm:IdeaViewModel}">
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding AssociateTagCommand}" Key="OemComma"
+                    CommandParameter="{Binding ElementName=txtTagEdit, Path=Text}"/>
+    </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,7 +37,31 @@
 
         <!--Row 2: Idea Tags-->
         <TextBlock Grid.Row="2" Text="Tags:" Margin="5 2 2 2" ></TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="5 2 2 2" Visibility="{Binding Visibility}" />
+        <StackPanel Grid.Row="2" Grid.Column="1" >
+            <TextBox Margin="5 2 2 2" Visibility="{Binding Visibility}"
+                     x:Name="txtTagEdit" Text="{Binding TempStatusText, Mode=OneWay}" />
+            <ItemsControl Grid.Row="2" Grid.Column="1" Margin="5 2 2 2" IsEnabled="{Binding IsEdit}"
+                 ItemsSource="{Binding TagsSelected}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" Background="LightBlue" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{TemplateBinding Content}"/>
+                                <Button Content="X" ToolTip="Remove Tag" Command="{Binding Path=DataContext.DisassociateTagCommand,
+                                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"                                    
+                                    CommandParameter="{TemplateBinding Content}"
+                                    Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.Visibility}"></Button>
+                        </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
 
         <!--Row 3: Status-->
         <TextBlock Grid.Row="3" Text="Status:" Margin="5 2 2 2" ></TextBlock>

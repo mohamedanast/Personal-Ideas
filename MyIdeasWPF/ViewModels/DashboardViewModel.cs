@@ -23,8 +23,6 @@ namespace Ideas.ViewModels
             get; private set;
         }
 
-        public string TestString { get { return "Test string from Dashboard binding"; } }
-
         public DashboardViewModel(ViewModel ideasVM, ViewModel fruitfulIdeasVM)
         {
             IdeasVM = ideasVM;

@@ -1,4 +1,5 @@
 ﻿using Ideas.DataAccess.Entities;
+using Ideas.UI.Utilities;
 using Ideas.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,25 @@ namespace Ideas.Utilities
     {
         public static ViewModel CreateStartVM()
         {
-            ViewModel dashboardVM = CreateDashboardVM();
-            ViewModel appVM = new ApplicationViewModel(dashboardVM);
+            ViewModel appVM = new ApplicationViewModel();
+            ViewModel dashboardVM = CreateDashboardVM(appVM);
+            (appVM as ApplicationViewModel).CurrentPageVM = dashboardVM;
 
             return appVM;
         }
 
-        public static ViewModel CreateDashboardVM()
+        public static ViewModel CreateDashboardVM(ViewModel appVM)
         {
             ViewModel ideasVM = CreateIdeasVM();
             ViewModel fruitfulIdeasVM = CreateFruitfulIdeasVM();
+
             ViewModel dashboardVM = new DashboardViewModel(ideasVM, fruitfulIdeasVM);
+            dashboardVM.RootVM = appVM;
+
+            ideasVM.RootVM = appVM;
+            ideasVM.ParentVM = dashboardVM;
+            fruitfulIdeasVM.RootVM = appVM;
+            fruitfulIdeasVM.ParentVM = dashboardVM;
 
             return dashboardVM;
         }
@@ -36,23 +45,36 @@ namespace Ideas.Utilities
 
         public static ViewModel CreateFruitfulIdeasVM()
         {
-            ViewModel ideasVM = new FruitfuldeasViewModel();
+            ViewModel ideasVM = new FruitfulIdeasViewModel();
 
             return ideasVM;
         }
 
-        public static ViewModel CreateIdeaVM(bool isEdit, Idea currentIdea)
+        public static ViewModel CreateAllIdeasVM(ViewModel rootVM)
         {
-            IdeaViewModel ideaVM = new IdeaViewModel(isEdit);
+            ViewModel ideasVM = new AllIdeasViewModel();
+            ideasVM.RootVM = rootVM;
+            ideasVM.SetNavReferenceVM(rootVM);
+
+            return ideasVM;
+        }
+
+        public static ViewModel CreateIdeaVM(bool isEdit, Idea currentIdea, ViewModel rootVM)
+        {
+            IdeaViewModel ideaVM = null;
             if (currentIdea != null)
             {
+                ideaVM = new IdeaViewModel(isEdit, currentIdea.IdeaId);
                 ideaVM.CurrentIdea = currentIdea;
-                ideaVM.IdeaId = currentIdea.IdeaId;
             }
             else
             {
+                ideaVM = new IdeaViewModel(isEdit, null);
                 ideaVM.CurrentIdea = new Idea();
             }
+
+            ideaVM.RootVM = rootVM;
+            ideaVM.SetNavReferenceVM(rootVM);
 
             return ideaVM;
         }

@@ -11,7 +11,6 @@ namespace Ideas.ViewModels
 {
     public class ViewModel : INotifyPropertyChanged
     {
-        private ICommand cancelCommand;
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -24,12 +23,29 @@ namespace Ideas.ViewModels
                 this.PropertyChanged(this, e);
             }
         }
-        
+
         //[DebuggerStepThrough]
         public virtual void VerifyPropertyName(string propertyName)
         {
-            if (TypeDescriptor.GetProperties(this)[propertyName] == null)        
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
                 throw new Exception("Invalid property name: " + propertyName);
+        }
+
+        // Navigation Properties
+        public ViewModel RootVM { get; set; }
+        public ViewModel LastVM { get; set; }
+        public ViewModel ParentVM { get; set; }
+        private ICommand cancelCommand;
+
+        protected virtual void CancelAction()
+        {
+            if (RootVM != null && LastVM != null)
+            {
+                if (RootVM is ApplicationViewModel)
+                {
+                    (RootVM as ApplicationViewModel).CurrentPageVM = LastVM;
+                }
+            }
         }
 
         public ICommand CancelCommand
@@ -41,12 +57,6 @@ namespace Ideas.ViewModels
 
                 return cancelCommand;
             }
-        }
-
-        protected virtual void CancelAction()
-        {
-            //TODO:
-            System.Windows.MessageBox.Show("Not implemented");
         }
     }
 }

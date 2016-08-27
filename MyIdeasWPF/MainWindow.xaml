@@ -13,10 +13,17 @@
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
             <local:DashboardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:IdeasViewModel}">
+            <local:IdeasView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:IdeaViewModel}">
             <local:IdeaView />
         </DataTemplate>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewIdeaCommand}" />
+        <KeyBinding Key="I" Modifiers="Control" Command="{Binding ViewAllIdeasCommand}" />
+    </Window.InputBindings>
     
     <DockPanel Name="MainDisp" LastChildFill="True">
         <ToolBar Name="MainToolBar" DockPanel.Dock="Top">
@@ -25,7 +32,7 @@
                 <MenuItem Header="_Manage">
                     <MenuItem Header="_Ideas">
                         <MenuItem Header="_New Idea" Command="{Binding NewIdeaCommand}"></MenuItem>
-                        <MenuItem Header="View _All Ideas"></MenuItem>
+                        <MenuItem Header="View _All Ideas" Command="{Binding ViewAllIdeasCommand}"></MenuItem>
                     </MenuItem>
                     <MenuItem Header="_Tags">
                         <MenuItem Header="_New Tag"></MenuItem>

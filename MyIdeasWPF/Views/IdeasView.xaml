@@ -17,10 +17,18 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <DataGrid ItemsSource="{Binding Ideas}" AutoGenerateColumns="False" >
+        <DataGrid ItemsSource="{Binding Ideas}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedIdea}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Idea" Binding="{Binding Path=Title}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Created" Binding="{Binding Path=Created}" Width="Auto"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Edit"  Command="{Binding Path=DataContext.EditIdeaCommand,
+                                 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>

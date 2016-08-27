@@ -9,6 +9,7 @@ using Ideas.DataAccess.Model;
 using Ideas.DataAccess.BaseTypes;
 using Ideas.DataAccess.UtilityTypes;
 using Ideas.Utilities;
+using Ideas.UI.Utilities;
 
 namespace Ideas.ViewModels
 {
@@ -16,6 +17,7 @@ namespace Ideas.ViewModels
     {
         private ViewModel currentPageVM;
         private ICommand newIdeaCommand;
+        private ICommand viewAllIdeasCmd;
 
         public ViewModel CurrentPageVM
         {
@@ -29,15 +31,17 @@ namespace Ideas.ViewModels
                 }
             }
         }
-
-        public ApplicationViewModel(ViewModel currentVM)
-        {
-            currentPageVM = currentVM;
-        }
-
+        
         private void NewIdea()
         {
-            CurrentPageVM = ViewFactory.CreateIdeaVM(true, null);
+            ViewModel viewModel = ViewFactory.CreateIdeaVM(true, null, this);
+            viewModel.NavigateTo();
+        }
+
+        private void ViewAllIdeas()
+        {
+            ViewModel viewModel = ViewFactory.CreateAllIdeasVM(this);
+            viewModel.NavigateTo();
         }
 
         public ICommand NewIdeaCommand
@@ -51,5 +55,15 @@ namespace Ideas.ViewModels
             }
         }
 
+        public ICommand ViewAllIdeasCommand
+        {
+            get
+            {
+                if (viewAllIdeasCmd == null)
+                    viewAllIdeasCmd = new ActionCommand(p => ViewAllIdeas());
+
+                return viewAllIdeasCmd;
+            }
+        }
     }
 }

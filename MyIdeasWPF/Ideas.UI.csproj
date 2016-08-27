@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,10 +65,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utilities\UtilityExtensions.cs" />
     <Compile Include="Utilities\ViewFactory.cs" />
     <Compile Include="Utilities\ViewInfrastructure.cs" />
     <Compile Include="ViewModels\ActionCommand.cs" />
     <Compile Include="ViewModels\AppicationViewModel.cs" />
+    <Compile Include="ViewModels\AlIdeasViewModel.cs" />
     <Compile Include="ViewModels\FruitfuldeasViewModel.cs" />
     <Compile Include="ViewModels\IdeasViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />

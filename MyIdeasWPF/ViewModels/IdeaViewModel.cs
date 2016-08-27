@@ -10,6 +10,9 @@ using Ideas.DataAccess.BaseTypes;
 using Ideas.DataAccess.UtilityTypes;
 using System.Reflection;
 using System.ComponentModel;
+using System.Transactions;
+using System.Collections.ObjectModel;
+using Ideas.UI.Utilities;
 
 namespace Ideas.ViewModels
 {
@@ -18,13 +21,19 @@ namespace Ideas.ViewModels
         private int? ideaId;
         private bool isEdit;
         private IDictionary<string, string> StatusCollection;
-        private IDictionary<string, string> AllTags;
+        private IDictionary<int, string> AllTags;
+        private IDictionary<int, string> DeletedTags;
+        private IDictionary<string, int?> CurrentTags;
         private Idea currentIdea;
+        private ICommand associateTagCmd;
+        private ICommand disAssociateTagCmd;
         private ICommand getIdeaCmd;
         private ICommand saveIdeaCmd;
 
-        public IdeaViewModel(bool isEdit)
+        public IdeaViewModel(bool isEdit, int? iId)
         {
+            this.IdeaId = iId;
+
             // Get the IdeaStatus enum as a collection, so that the view can bind to it without hardcoding the statuses.
             StatusCollection = new Dictionary<string, string>();
             IdeaStatus archived = IdeaStatus.Archived;
@@ -45,6 +54,32 @@ namespace Ideas.ViewModels
             }
 
             this.IsEdit = isEdit;
+            
+            if (isEdit)
+            {
+                AllTags = new Dictionary<int, string>();
+                using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+                {
+                    IEnumerable<Tag> tags = transaction.TagRepo.GetByQuery();
+                    foreach(Tag tag in tags)
+                        AllTags.Add(tag.TagId, tag.TagName);
+                }
+            }
+
+            CurrentTags = new Dictionary<string, int?>();
+            if (ideaId != null)
+            {
+                //GetIdea(); Refresh required?
+
+                using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+                {
+                    IEnumerable<IdeaTag> tags = transaction.IdeaTagRepo.GetByQuery(it => it.IdeaId == ideaId);
+                    foreach (IdeaTag tag in tags)
+                        CurrentTags.Add(tag.Tag.TagName, tag.TagId);
+                }
+            }
+
+            DeletedTags = new Dictionary<int, string>();
         }
 
         public Idea CurrentIdea
@@ -90,6 +125,16 @@ namespace Ideas.ViewModels
             get { return StatusCollection.Values; }
         }
 
+        public ObservableCollection<string> TagsSelected
+        {
+            get { return new ObservableCollection<string>(CurrentTags.Keys); }
+        }
+
+        public string TempStatusText
+        {
+            get; private set;
+        }
+
         public string CurrentStatus
         {
             get
@@ -105,7 +150,29 @@ namespace Ideas.ViewModels
                 currentIdea.Status = (byte)status;
             }
         }
-        
+
+        public ICommand AssociateTagCommand
+        {
+            get
+            {
+                if (associateTagCmd == null)
+                    associateTagCmd = new ActionCommand(p => AssociateTag(p));
+
+                return associateTagCmd;
+            }
+        }
+
+        public ICommand DisassociateTagCommand
+        {
+            get
+            {
+                if (disAssociateTagCmd == null)
+                    disAssociateTagCmd = new ActionCommand(p => DisassociateTag(p));
+
+                return disAssociateTagCmd;
+            }
+        }
+
         public ICommand GetIdeaCommand
         {
             get
@@ -128,6 +195,38 @@ namespace Ideas.ViewModels
             }
         }
 
+        private void AssociateTag(object parameter)
+        {
+            string txtValue = parameter as string;
+            if (!string.IsNullOrEmpty(txtValue ))
+            {
+                // Add new tags with null, to find and add to db upon saving
+                if (CurrentTags.Keys.Count(k => k.Equals(txtValue, StringComparison.CurrentCultureIgnoreCase)) == 0)
+                {
+                    CurrentTags.Add(txtValue, null);
+                    TempStatusText = string.Empty;
+                    OnPropertyChanged("TagsSelected");
+                    OnPropertyChanged("TempStatusText");
+                }
+            }
+        }
+
+        private void DisassociateTag(object parameter)
+        {
+            string txtValue = parameter as string;
+            if (!string.IsNullOrEmpty(txtValue))
+            {
+                if (CurrentTags.Keys.Count(k => k.Equals(txtValue, StringComparison.CurrentCultureIgnoreCase)) == 1)
+                {
+                    KeyValuePair<string, int?> currentTag = CurrentTags.Where(t => t.Key.Equals(txtValue, StringComparison.CurrentCultureIgnoreCase)).Single();
+                    if (currentTag.Value.HasValue)
+                        DeletedTags.Add(currentTag.Value.Value, txtValue);
+                    CurrentTags.Remove(currentTag.Key);
+                    OnPropertyChanged("TagsSelected");
+                }
+            }
+        }
+
         private void GetIdea()
         {
             if (this.IdeaId != null)
@@ -138,18 +237,62 @@ namespace Ideas.ViewModels
                 }
             }
         }
-        
+
         private void SaveIdea()
         {
-            using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+            // use transaction 'coz there'll be multiple changes with idea, tags and ideatags
+            using (TransactionScope ts = new TransactionScope())
             {
-                if (IdeaId.HasValue)
-                    transaction.IdeaRepo.Update(CurrentIdea);
-                else
-                    transaction.IdeaRepo.Insert(CurrentIdea);
+                using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+                {
+                    foreach (KeyValuePair<string, int?> tag in CurrentTags.Where(v => v.Value == null))
+                    {
+                        // TODO: Enhance this to be transaction compliant, esp if changed to a multi-user system
+                        if (AllTags.Count(t => t.Value.Equals(tag.Key, StringComparison.CurrentCultureIgnoreCase)) == 0)
+                        {
+                            // New tag, insert it
+                            transaction.TagRepo.Insert(new Tag { TagName = tag.Key });
+                        }
+                    }
 
-                transaction.Commit();
+                    // Initial save of tags. TODO: This may not be required if the inserted tags are just added to collection
+                    transaction.Commit();
+
+                    // reload all tags
+                    AllTags.Clear();
+                    IEnumerable<Tag> tags = transaction.TagRepo.GetByQuery();
+                    foreach (Tag tag in tags)
+                        AllTags.Add(tag.TagId, tag.TagName);
+
+                    // Insert/Update Idea
+                    if (IdeaId.HasValue)
+                        transaction.IdeaRepo.Update(CurrentIdea);
+                    else
+                        transaction.IdeaRepo.Insert(CurrentIdea);
+
+                    // Delete from IdeaTags
+                    foreach (KeyValuePair<int, string> tag in DeletedTags)
+                    {
+                        IdeaTag itemToDelete = transaction.IdeaTagRepo.GetByQuery(it => it.IdeaId == CurrentIdea.IdeaId && it.TagId == tag.Key).FirstOrDefault();
+                        if (itemToDelete != null)
+                            transaction.IdeaTagRepo.Delete(itemToDelete);
+                    }
+
+                    // Insert into IdeaTags
+                    foreach (KeyValuePair<string, int?> tag in CurrentTags.Where(v => v.Value == null))
+                    {
+                        KeyValuePair<int, string> newTag = AllTags.Where(t => t.Value.Equals(tag.Key, StringComparison.CurrentCultureIgnoreCase)).Single();
+                        transaction.IdeaTagRepo.Insert(new IdeaTag { IdeaId = CurrentIdea.IdeaId, TagId = newTag.Key });
+                    }
+
+                    transaction.Commit();
+                }
+
+                ts.Complete();
             }
+
+            if (this.LastVM != null)
+                this.LastVM.NavigateTo();
         }
     }
 }

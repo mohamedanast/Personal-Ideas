@@ -2,6 +2,7 @@
 using Ideas.DataAccess.Entities;
 using Ideas.DataAccess.Model;
 using Ideas.DataAccess.UtilityTypes;
+using Ideas.Utilities;
 using Ideas.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Ideas.UI.Utilities;
 
 namespace Ideas.ViewModels
 {
@@ -17,6 +19,7 @@ namespace Ideas.ViewModels
         protected int ideaId;
         protected IList<Idea> ideas;
         private ICommand getIdeasCmd;
+        private ICommand editIdeaCmd;
         private ICommand deleteIdeaCmd;
         
         public int IdeaId
@@ -47,11 +50,22 @@ namespace Ideas.ViewModels
             }
         }
 
+        public Idea SelectedIdea { get; set; }
+
         protected virtual void GetIdeas()
         {
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
             {
-                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != (int)IdeaStatus.Archived ).ToList();
+                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != (int)IdeaStatus.Archived, ideas => ideas.OrderByDescending(i=> i.Created) ).Take(10).ToList();
+            }
+        }
+
+        protected virtual void EditIdea()
+        {
+           if (SelectedIdea != null)
+            {
+                ViewModel editIdeaVM = ViewFactory.CreateIdeaVM(true, SelectedIdea, this.RootVM);
+                editIdeaVM.NavigateTo();
             }
         }
 
@@ -72,6 +86,17 @@ namespace Ideas.ViewModels
                     getIdeasCmd = new ActionCommand(p => GetIdeas());
 
                 return getIdeasCmd;
+            }
+        }
+
+        public ICommand EditIdeaCommand
+        {
+            get
+            {
+                if (editIdeaCmd == null)
+                    editIdeaCmd = new ActionCommand(p => EditIdea());
+
+                return editIdeaCmd;
             }
         }
 

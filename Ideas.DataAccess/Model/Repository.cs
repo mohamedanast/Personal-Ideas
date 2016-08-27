@@ -70,7 +70,7 @@ namespace Ideas.DataAccess.Model
         {
             if (dbContext.Entry(entity).State == EntityState.Detached)
                 dbSet.Attach(entity);
-
+            
             dbSet.Remove(entity);
         }
 
