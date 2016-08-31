@@ -23,10 +23,16 @@ namespace Ideas.ViewModels
             get; private set;
         }
 
-        public DashboardViewModel(ViewModel ideasVM, ViewModel fruitfulIdeasVM)
+        public ViewModel PopularTagsVM
+        {
+            get; private set;
+        }
+
+        public DashboardViewModel(ViewModel ideasVM, ViewModel fruitfulIdeasVM, ViewModel popularTagsVM)
         {
             IdeasVM = ideasVM;
             FruitfulIdeasVM = fruitfulIdeasVM;
+            PopularTagsVM = popularTagsVM;
         }
     }
 }

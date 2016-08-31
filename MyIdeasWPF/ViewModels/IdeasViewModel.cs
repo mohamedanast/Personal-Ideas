@@ -11,12 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Ideas.UI.Utilities;
+using System.Globalization;
 
 namespace Ideas.ViewModels
 {
     public class IdeasViewModel : ViewModel
     {
         protected int ideaId;
+        public Idea selectedIdea;
         protected IList<Idea> ideas;
         private ICommand getIdeasCmd;
         private ICommand editIdeaCmd;
@@ -50,7 +52,37 @@ namespace Ideas.ViewModels
             }
         }
 
-        public Idea SelectedIdea { get; set; }
+        public virtual IEnumerable<IdeaView> IdeasViewData
+        {
+            get
+            {
+                if (ideas == null) GetIdeas();  // TODO: Just for testing, remove & use commands instead
+                IEnumerable<IdeaView> ideasViewData = ideas.Select(idea => new IdeaView
+                {
+                    IdeaId = idea.IdeaId,
+                    Title = idea.Title,
+                    SecondDisplayColumn = idea.Created.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern)
+                });
+
+                return ideasViewData;
+            }
+        }
+        
+        public IdeaView SelectedIdea
+        {
+            get
+            {
+                if (selectedIdea != null)
+                    return new IdeaView { IdeaId = selectedIdea.IdeaId, Title = selectedIdea.Title };
+                else
+                    return null;
+            }
+            set
+            {
+                selectedIdea = ideas.Where(i => i.IdeaId == value.IdeaId).FirstOrDefault();
+                OnPropertyChanged("SelectedIdea");
+            }
+        }
 
         protected virtual void GetIdeas()
         {
@@ -62,9 +94,9 @@ namespace Ideas.ViewModels
 
         protected virtual void EditIdea()
         {
-           if (SelectedIdea != null)
+           if (selectedIdea != null)
             {
-                ViewModel editIdeaVM = ViewFactory.CreateIdeaVM(true, SelectedIdea, this.RootVM);
+                ViewModel editIdeaVM = ViewFactory.CreateIdeaVM(true, selectedIdea, this.RootVM);
                 editIdeaVM.NavigateTo();
             }
         }
@@ -109,6 +141,13 @@ namespace Ideas.ViewModels
 
                 return deleteIdeaCmd;
             }
+        }
+
+        public class IdeaView
+        {
+            public int IdeaId { get; set; }
+            public string Title { get; set; }
+            public string SecondDisplayColumn { get; set; }
         }
     }
 }

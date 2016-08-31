@@ -13,9 +13,9 @@
         <DataTemplate DataType="{x:Type vm:IdeasViewModel}">
             <local:IdeasView />
         </DataTemplate>
-        <!--<DataTemplate DataType="{x:Type vm:FruitfuldeasViewModel}">
-            <local:IdeasView />
-        </DataTemplate>-->
+        <DataTemplate DataType="{x:Type vm:PopularTagsViewModel}">
+            <local:PopularTagsView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -38,6 +38,9 @@
                 <TextBlock Text="Fruitful Ideas"></TextBlock>
                 <ContentControl Margin="5" Content="{Binding FruitfulIdeasVM}" />
             </StackPanel>
+        </Border>
+        <Border Grid.Column="2" Grid.Row="2" Margin="1" BorderThickness="5" BorderBrush="BlanchedAlmond">
+            <ContentControl Margin="5" Content="{Binding PopularTagsVM}" />
         </Border>
     </Grid>
 </UserControl>

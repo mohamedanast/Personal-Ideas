@@ -20,7 +20,7 @@ namespace Ideas.DataAccess.Entities
         [Required]
         [StringLength(250)]
         public string Title { get; set; }
-
+        
         public string Description { get; set; }
 
         [Column(TypeName = "datetime2")]
@@ -31,7 +31,6 @@ namespace Ideas.DataAccess.Entities
 
         [Column("Status", TypeName = "tinyint")]
         public byte Status { get; set; }
-        //public IdeaStatus Status { get; set; }    // TODO: Why not able to use the status as enum? (Querying is not working) Retry?
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IdeaAttachment> IdeaAttachments { get; set; }

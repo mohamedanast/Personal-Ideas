@@ -17,7 +17,6 @@ namespace Ideas.ViewModels
                 ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != (int)IdeaStatus.Archived, ideas => ideas.OrderByDescending(i => i.Created)).ToList();
             }
         }
-
     }
 }
  

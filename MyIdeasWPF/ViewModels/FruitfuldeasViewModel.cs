@@ -1,5 +1,7 @@
 ﻿using Ideas.DataAccess.BaseTypes;
+using Ideas.DataAccess.Entities;
 using Ideas.DataAccess.UtilityTypes;
+using Ideas.UI.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,23 @@ namespace Ideas.ViewModels
                     elts => elts.OrderByDescending(elt => elt.Created)).Take(10).ToList();
             }
         }
+
+        public override IEnumerable<IdeaView> IdeasViewData
+        {
+            get
+            {
+                if (ideas == null) GetIdeas();
+                Dictionary<string, string> statusCollection = UICommon.GetStatusCollection(IdeaStatus.Archived, false);
+                IList<IdeaView> ideasViewData = new List<IdeaView>();
+                return ideas.Select(idea => new IdeaView
+                {
+                    IdeaId = idea.IdeaId,
+                    Title = idea.Title,
+                    SecondDisplayColumn = statusCollection[((IdeaStatus)idea.Status).ToString()]
+                });
+            }
+        }
+
     }
 }
  

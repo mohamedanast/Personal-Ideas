@@ -8,8 +8,6 @@ using System.Windows.Input;
 using Ideas.DataAccess.Model;
 using Ideas.DataAccess.BaseTypes;
 using Ideas.DataAccess.UtilityTypes;
-using System.Reflection;
-using System.ComponentModel;
 using System.Transactions;
 using System.Collections.ObjectModel;
 using Ideas.UI.Utilities;
@@ -35,23 +33,7 @@ namespace Ideas.ViewModels
             this.IdeaId = iId;
 
             // Get the IdeaStatus enum as a collection, so that the view can bind to it without hardcoding the statuses.
-            StatusCollection = new Dictionary<string, string>();
-            IdeaStatus archived = IdeaStatus.Archived;
-            foreach (string status in Enum.GetNames(archived.GetType()))
-            {
-                if (status != archived.ToString())
-                {
-                    FieldInfo fieldInfo = archived.GetType().GetField(status);
-                    if (fieldInfo != null)
-                    {
-                        object[] attributes = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), true);
-                        if (attributes.Length > 0)
-                        {
-                            StatusCollection.Add(status, ((DescriptionAttribute)attributes[0]).Description);
-                        }
-                    }
-                }
-            }
+            StatusCollection = UICommon.GetStatusCollection(IdeaStatus.Archived, true);
 
             this.IsEdit = isEdit;
             
@@ -267,8 +249,10 @@ namespace Ideas.ViewModels
                     // Insert/Update Idea
                     if (IdeaId.HasValue)
                         transaction.IdeaRepo.Update(CurrentIdea);
-                    else
+                    else {
+                        CurrentIdea.Created = DateTime.Now;
                         transaction.IdeaRepo.Insert(CurrentIdea);
+                    }
 
                     // Delete from IdeaTags
                     foreach (KeyValuePair<int, string> tag in DeletedTags)
@@ -276,6 +260,8 @@ namespace Ideas.ViewModels
                         IdeaTag itemToDelete = transaction.IdeaTagRepo.GetByQuery(it => it.IdeaId == CurrentIdea.IdeaId && it.TagId == tag.Key).FirstOrDefault();
                         if (itemToDelete != null)
                             transaction.IdeaTagRepo.Delete(itemToDelete);
+
+                        //TODO: Delete the tag entry if it's not used in any idea
                     }
 
                     // Insert into IdeaTags

@@ -24,16 +24,26 @@ namespace Ideas.Utilities
         {
             ViewModel ideasVM = CreateIdeasVM();
             ViewModel fruitfulIdeasVM = CreateFruitfulIdeasVM();
+            ViewModel popularTagsVM = CreatePopularTagsVM();
 
-            ViewModel dashboardVM = new DashboardViewModel(ideasVM, fruitfulIdeasVM);
+            ViewModel dashboardVM = new DashboardViewModel(ideasVM, fruitfulIdeasVM, popularTagsVM);
             dashboardVM.RootVM = appVM;
 
             ideasVM.RootVM = appVM;
             ideasVM.ParentVM = dashboardVM;
             fruitfulIdeasVM.RootVM = appVM;
             fruitfulIdeasVM.ParentVM = dashboardVM;
+            popularTagsVM.RootVM = appVM;
+            popularTagsVM.ParentVM = dashboardVM;
 
             return dashboardVM;
+        }
+
+        private static ViewModel CreatePopularTagsVM()
+        {
+            ViewModel tagsVM = new PopularTagsViewModel();
+
+            return tagsVM;
         }
 
         public static ViewModel CreateIdeasVM()
