@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ideas.UI.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -41,10 +42,7 @@ namespace Ideas.ViewModels
         {
             if (RootVM != null && LastVM != null)
             {
-                if (RootVM is ApplicationViewModel)
-                {
-                    (RootVM as ApplicationViewModel).CurrentPageVM = LastVM;
-                }
+                LastVM.NavigateTo();
             }
         }
 

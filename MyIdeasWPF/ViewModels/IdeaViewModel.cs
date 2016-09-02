@@ -96,7 +96,7 @@ namespace Ideas.ViewModels
             set
             {
                 isEdit = value;
-                if (isEdit) Visibility = "Visible"; else Visibility = "Collapsed";
+                if (isEdit) Visibility = Constants.VisibilityVisible; else Visibility = Constants.VisibilityCollapsed;
             }
         }
         

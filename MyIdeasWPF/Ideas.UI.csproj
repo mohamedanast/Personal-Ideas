@@ -73,8 +73,9 @@
     <Compile Include="Utilities\WeightedTag.cs" />
     <Compile Include="ViewModels\ActionCommand.cs" />
     <Compile Include="ViewModels\AppicationViewModel.cs" />
-    <Compile Include="ViewModels\AlIdeasViewModel.cs" />
+    <Compile Include="ViewModels\ManageIdeasViewModel.cs" />
     <Compile Include="ViewModels\FruitfuldeasViewModel.cs" />
+    <Compile Include="ViewModels\QuickLinksViewModel.cs" />
     <Compile Include="ViewModels\PopularTagsViewModel.cs" />
     <Compile Include="ViewModels\IdeasViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
@@ -82,6 +83,9 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageIdeasView.xaml.cs">
+      <DependentUpon>ManageIdeasView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\IdeasView.xaml.cs">
       <DependentUpon>IdeasView.xaml</DependentUpon>
@@ -91,6 +95,9 @@
     </Compile>
     <Compile Include="Views\PopularTagsView.xaml.cs">
       <DependentUpon>PopularTagsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\QuickLinksView.xaml.cs">
+      <DependentUpon>QuickLinksView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -108,6 +115,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ManageIdeasView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\IdeasView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +128,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopularTagsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\QuickLinksView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

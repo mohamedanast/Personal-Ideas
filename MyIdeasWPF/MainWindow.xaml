@@ -7,17 +7,21 @@
         xmlns:vm="clr-namespace:Ideas.ViewModels"
         mc:Ignorable="d"
         Title="My Ideas" Height="480" Width="640"
-        d:DataContext="{d:DesignInstance vm:ApplicationViewModel}">
+        d:DataContext="{d:DesignInstance vm:ApplicationViewModel}"
+             Background="AliceBlue">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
             <local:DashboardView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:IdeasViewModel}">
-            <local:IdeasView />
+            <local:ManageIdeasView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:IdeaViewModel}">
             <local:IdeaView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:QuickLinksViewModel}">
+            <local:QuickLinksView />
         </DataTemplate>
     </Window.Resources>
     <Window.InputBindings>
@@ -42,8 +46,8 @@
                 <MenuItem Header="Help"></MenuItem>
             </Menu>
         </ToolBar>
-        <StackPanel Name="Quickinks" DockPanel.Dock="Right" Width="90">
-            <TextBlock>Quickinks</TextBlock>
+        <StackPanel Name="Quickinks" DockPanel.Dock="Right" MinWidth="110">
+            <ContentControl Content="{Binding QuickLinksVM}"/>
         </StackPanel>
 
         <DockPanel DockPanel.Dock="Left">

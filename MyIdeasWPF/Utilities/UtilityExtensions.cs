@@ -12,7 +12,14 @@ namespace Ideas.UI.Utilities
         public static void NavigateTo(this ViewModel targetViewModel)
         {
             if (targetViewModel.RootVM != null && targetViewModel.RootVM is ApplicationViewModel)
-                (targetViewModel.RootVM as ApplicationViewModel).CurrentPageVM = targetViewModel;
+            {
+                ApplicationViewModel MainVM = targetViewModel.RootVM as ApplicationViewModel;
+                MainVM.CurrentPageVM = targetViewModel;
+
+                // Keep a copy of reference of last VM in quick links also
+                MainVM.QuickLinksVM.LastVM = targetViewModel.LastVM;
+                (MainVM.QuickLinksVM as QuickLinksViewModel).BackLnkVisibility = Constants.VisibilityVisible;   // Just for triggering the OnPropertyChanged.
+            }
         }
 
         public static void SetNavReferenceVM(this ViewModel current, ViewModel rootVM)

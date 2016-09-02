@@ -10,5 +10,7 @@ namespace Ideas.UI.Utilities
     {
         public const int PopularTagCount = 15;
         public const int TagBaseFontSize = 12;
+        public const string VisibilityCollapsed = "Collapsed";
+        public const string VisibilityVisible = "Visible";
     }
 }

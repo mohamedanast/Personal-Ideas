@@ -37,6 +37,7 @@ namespace Ideas.ViewModels
                 IQueryable<IdeaTag> ideaTags = transaction.IdeaTagRepo.GetByQuery(includeProperties: "Tag") as IQueryable<IdeaTag>;
 
                 tags = (from it in ideaTags
+                        where it.Idea.Status != (byte)IdeaStatus.Archived
                         group it by it.Tag into grouped
                         orderby grouped.Count() descending
                         select new WeightedTag { Tag = grouped.Key, Count = grouped.Count() })

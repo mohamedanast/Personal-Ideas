@@ -15,7 +15,10 @@ namespace Ideas.Utilities
         {
             ViewModel appVM = new ApplicationViewModel();
             ViewModel dashboardVM = CreateDashboardVM(appVM);
+            ViewModel quickLinksVM = new QuickLinksViewModel();
+            quickLinksVM.RootVM = appVM;
             (appVM as ApplicationViewModel).CurrentPageVM = dashboardVM;
+            (appVM as ApplicationViewModel).QuickLinksVM = quickLinksVM;
 
             return appVM;
         }
@@ -62,7 +65,7 @@ namespace Ideas.Utilities
 
         public static ViewModel CreateAllIdeasVM(ViewModel rootVM)
         {
-            ViewModel ideasVM = new AllIdeasViewModel();
+            ViewModel ideasVM = new ManageIdeasViewModel();
             ideasVM.RootVM = rootVM;
             ideasVM.SetNavReferenceVM(rootVM);
 

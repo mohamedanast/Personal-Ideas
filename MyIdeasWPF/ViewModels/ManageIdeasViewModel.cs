@@ -1,5 +1,4 @@
 ﻿using Ideas.DataAccess.BaseTypes;
-using Ideas.DataAccess.Entities;
 using Ideas.DataAccess.UtilityTypes;
 using Ideas.UI.Utilities;
 using System;
@@ -10,14 +9,13 @@ using System.Threading.Tasks;
 
 namespace Ideas.ViewModels
 {
-    public class FruitfulIdeasViewModel : IdeasViewModel
+    public class ManageIdeasViewModel : IdeasViewModel
     {
         protected override void GetIdeas()
         {
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
             {
-                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status == (int)IdeaStatus.Implemented || i.Status == (int)IdeaStatus.OnImplementation,
-                    elts => elts.OrderByDescending(elt => elt.Created)).Take(10).ToList();
+                ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != (int)IdeaStatus.Archived, ideas => ideas.OrderByDescending(i => i.Created)).ToList();
             }
         }
 
@@ -35,7 +33,6 @@ namespace Ideas.ViewModels
                 });
             }
         }
-
     }
 }
  

@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Ideas.UI.Views.QuickLinksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ideas.UI.Views"
+             xmlns:vm="clr-namespace:Ideas.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:QuickLinksViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Control.Resources>
+        <Style x:Key="Link" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock TextDecorations="Underline" 
+                    Text="{TemplateBinding Content}"
+                    Background="{TemplateBinding Background}"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Control.Resources>
+    <Border Margin="1" BorderThickness="5" Background="BlanchedAlmond">
+        <StackPanel Margin="3 3 3 3" Orientation="Vertical">
+            <TextBlock Text="Quicklinks" FontSize="15"/>
+            <Separator/>
+            <Button Content="Go Back" Visibility="{Binding BackLnkVisibility}"
+                Command="{Binding CancelCommand}" Style="{StaticResource Link}"/>
+        </StackPanel>
+    </Border>
+</UserControl>

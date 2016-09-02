@@ -59,8 +59,7 @@ namespace Ideas.ViewModels
                 if (ideas == null) GetIdeas();  // TODO: Just for testing, remove & use commands instead
                 IEnumerable<IdeaView> ideasViewData = ideas.Select(idea => new IdeaView
                 {
-                    IdeaId = idea.IdeaId,
-                    Title = idea.Title,
+                    Idea = idea,
                     SecondDisplayColumn = idea.Created.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern)
                 });
 
@@ -73,13 +72,13 @@ namespace Ideas.ViewModels
             get
             {
                 if (selectedIdea != null)
-                    return new IdeaView { IdeaId = selectedIdea.IdeaId, Title = selectedIdea.Title };
+                    return new IdeaView { Idea = selectedIdea };
                 else
                     return null;
             }
             set
             {
-                selectedIdea = ideas.Where(i => i.IdeaId == value.IdeaId).FirstOrDefault();
+                selectedIdea = value.Idea;
                 OnPropertyChanged("SelectedIdea");
             }
         }
@@ -105,7 +104,8 @@ namespace Ideas.ViewModels
         {
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
             {
-                transaction.IdeaRepo.DeleteByID(IdeaId);
+                selectedIdea.Status = (byte)IdeaStatus.Archived;
+                transaction.IdeaRepo.Update(selectedIdea);
                 transaction.Commit();
             }
         }
@@ -137,7 +137,7 @@ namespace Ideas.ViewModels
             get
             {
                 if (deleteIdeaCmd == null)
-                    deleteIdeaCmd = new ActionCommand(e => DeleteIdea(), c => IdeaId > 0);
+                    deleteIdeaCmd = new ActionCommand(e => DeleteIdea());
 
                 return deleteIdeaCmd;
             }
@@ -145,8 +145,7 @@ namespace Ideas.ViewModels
 
         public class IdeaView
         {
-            public int IdeaId { get; set; }
-            public string Title { get; set; }
+            public Idea Idea { get; set; }
             public string SecondDisplayColumn { get; set; }
         }
     }

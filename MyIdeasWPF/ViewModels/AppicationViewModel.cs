@@ -16,6 +16,7 @@ namespace Ideas.ViewModels
     public class ApplicationViewModel : ViewModel
     {
         private ViewModel currentPageVM;
+        private ViewModel quickLinksVM;
         private ICommand newIdeaCommand;
         private ICommand viewAllIdeasCmd;
 
@@ -31,7 +32,20 @@ namespace Ideas.ViewModels
                 }
             }
         }
-        
+
+        public ViewModel QuickLinksVM
+        {
+            get { return quickLinksVM; }
+            set
+            {
+                if (value != quickLinksVM)
+                {
+                    quickLinksVM = value;
+                    OnPropertyChanged("QuickLinksVM");
+                }
+            }
+        }
+
         private void NewIdea()
         {
             ViewModel viewModel = ViewFactory.CreateIdeaVM(true, null, this);
