@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="My Ideas" Height="480" Width="640"
         d:DataContext="{d:DesignInstance vm:ApplicationViewModel}"
-             Background="AliceBlue">
+             Background="LightGray">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
@@ -22,6 +22,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:QuickLinksViewModel}">
             <local:QuickLinksView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NotificationViewModel}">
+            <local:NotificationView />
         </DataTemplate>
     </Window.Resources>
     <Window.InputBindings>
@@ -46,6 +49,10 @@
                 <MenuItem Header="Help"></MenuItem>
             </Menu>
         </ToolBar>
+
+        <!-- Notification area -->
+        <ContentControl DockPanel.Dock="Bottom" Content="{Binding NotificationVM}"/>
+
         <StackPanel Name="Quickinks" DockPanel.Dock="Right" MinWidth="110">
             <ContentControl Content="{Binding QuickLinksVM}"/>
         </StackPanel>

@@ -1,4 +1,5 @@
 ﻿using Ideas.DataAccess.UtilityTypes;
+using Ideas.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,10 +10,11 @@ using System.Threading.Tasks;
 
 namespace Ideas.UI.Utilities
 {
-    public static class UICommon
+    public static class IdeaCommon
     {
         /// <summary>
         /// Get the IdeaStatus enumeration converted into a collection, with Descrition attribute defined for the enum member as values 
+        /// TODO: Good candidate for static property or caching
         /// </summary>
         public static Dictionary<string, string> GetStatusCollection(IdeaStatus refIdeaStatus, bool excludeReference)
         {
@@ -52,6 +54,14 @@ namespace Ideas.UI.Utilities
             }
 
             return StatusCollection;
+        }
+
+        public static void HandleError(ViewModel RootVM, Exception exception)
+        {
+            ApplicationViewModel AppVM = RootVM as ApplicationViewModel;
+            AppVM.AddNotification("Error", exception.Message);
+
+            //TODO: Log exception
         }
     }
 }

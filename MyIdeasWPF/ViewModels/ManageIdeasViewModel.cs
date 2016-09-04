@@ -24,7 +24,7 @@ namespace Ideas.ViewModels
             get
             {
                 if (ideas == null) GetIdeas();
-                Dictionary<string, string> statusCollection = UICommon.GetStatusCollection(IdeaStatus.Archived, false);
+                Dictionary<string, string> statusCollection = IdeaCommon.GetStatusCollection(IdeaStatus.Archived, false);
                 IList<IdeaView> ideasViewData = new List<IdeaView>();
                 return ideas.Select(idea => new IdeaView
                 {

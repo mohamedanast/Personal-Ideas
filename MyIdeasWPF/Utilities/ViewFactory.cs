@@ -13,12 +13,15 @@ namespace Ideas.Utilities
     {
         public static ViewModel CreateStartVM()
         {
-            ViewModel appVM = new ApplicationViewModel();
+            ApplicationViewModel appVM = new ApplicationViewModel();
             ViewModel dashboardVM = CreateDashboardVM(appVM);
+            appVM.CurrentPageVM = dashboardVM;
+
             ViewModel quickLinksVM = new QuickLinksViewModel();
             quickLinksVM.RootVM = appVM;
-            (appVM as ApplicationViewModel).CurrentPageVM = dashboardVM;
-            (appVM as ApplicationViewModel).QuickLinksVM = quickLinksVM;
+            appVM.QuickLinksVM = quickLinksVM;
+
+            appVM.NotificationVM = new NotificationViewModel();
 
             return appVM;
         }

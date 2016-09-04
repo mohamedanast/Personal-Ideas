@@ -102,11 +102,19 @@ namespace Ideas.ViewModels
 
         private void DeleteIdea()
         {
-            using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+            try
             {
-                selectedIdea.Status = (byte)IdeaStatus.Archived;
-                transaction.IdeaRepo.Update(selectedIdea);
-                transaction.Commit();
+                using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+                {
+                    selectedIdea.Status = (byte)IdeaStatus.Archived;
+                    transaction.IdeaRepo.Update(selectedIdea);
+                    transaction.Commit();
+                    (this.RootVM as ApplicationViewModel).AddNotification("Idea Archived", "Idea '" + selectedIdea.Title + "' has been archived.");
+                }
+            }
+            catch (Exception exception)
+            {
+                IdeaCommon.HandleError(this.RootVM, exception);
             }
         }
 

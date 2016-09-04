@@ -8,7 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance vm:ManageIdeasViewModel}">
-    <StackPanel>
+    <StackPanel Margin="5">
+        <TextBlock Text="Manage Ideas"/>
         <DataGrid ItemsSource="{Binding IdeasViewData}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedIdea}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Idea" Binding="{Binding Path=Idea.Title}" Width="*"></DataGridTextColumn>

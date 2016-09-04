@@ -33,7 +33,7 @@ namespace Ideas.ViewModels
             this.IdeaId = iId;
 
             // Get the IdeaStatus enum as a collection, so that the view can bind to it without hardcoding the statuses.
-            StatusCollection = UICommon.GetStatusCollection(IdeaStatus.Archived, true);
+            StatusCollection = IdeaCommon.GetStatusCollection(IdeaStatus.Archived, true);
 
             this.IsEdit = isEdit;
             
@@ -222,63 +222,71 @@ namespace Ideas.ViewModels
 
         private void SaveIdea()
         {
-            // use transaction 'coz there'll be multiple changes with idea, tags and ideatags
-            using (TransactionScope ts = new TransactionScope())
+            try
             {
-                using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
+                // use transaction 'coz there'll be multiple changes with idea, tags and ideatags
+                using (TransactionScope ts = new TransactionScope())
                 {
-                    foreach (KeyValuePair<string, int?> tag in CurrentTags.Where(v => v.Value == null))
+                    using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
                     {
-                        // TODO: Enhance this to be transaction compliant, esp if changed to a multi-user system
-                        if (AllTags.Count(t => t.Value.Equals(tag.Key, StringComparison.CurrentCultureIgnoreCase)) == 0)
+                        foreach (KeyValuePair<string, int?> tag in CurrentTags.Where(v => v.Value == null))
                         {
-                            // New tag, insert it
-                            transaction.TagRepo.Insert(new Tag { TagName = tag.Key });
+                            // TODO: Enhance this to be transaction compliant, esp if changed to a multi-user system
+                            if (AllTags.Count(t => t.Value.Equals(tag.Key, StringComparison.CurrentCultureIgnoreCase)) == 0)
+                            {
+                                // New tag, insert it
+                                transaction.TagRepo.Insert(new Tag { TagName = tag.Key });
+                            }
                         }
+
+                        // Initial save of tags. TODO: This may not be required if the inserted tags are just added to collection
+                        transaction.Commit();
+
+                        // reload all tags
+                        AllTags.Clear();
+                        IEnumerable<Tag> tags = transaction.TagRepo.GetByQuery();
+                        foreach (Tag tag in tags)
+                            AllTags.Add(tag.TagId, tag.TagName);
+
+                        // Insert/Update Idea
+                        if (IdeaId.HasValue)
+                            transaction.IdeaRepo.Update(CurrentIdea);
+                        else {
+                            CurrentIdea.Created = DateTime.Now;
+                            transaction.IdeaRepo.Insert(CurrentIdea);
+                        }
+
+                        // Delete from IdeaTags
+                        foreach (KeyValuePair<int, string> tag in DeletedTags)
+                        {
+                            IdeaTag itemToDelete = transaction.IdeaTagRepo.GetByQuery(it => it.IdeaId == CurrentIdea.IdeaId && it.TagId == tag.Key).FirstOrDefault();
+                            if (itemToDelete != null)
+                                transaction.IdeaTagRepo.Delete(itemToDelete);
+
+                            //TODO: Delete the tag entry if it's not used in any idea
+                        }
+
+                        // Insert into IdeaTags
+                        foreach (KeyValuePair<string, int?> tag in CurrentTags.Where(v => v.Value == null))
+                        {
+                            KeyValuePair<int, string> newTag = AllTags.Where(t => t.Value.Equals(tag.Key, StringComparison.CurrentCultureIgnoreCase)).Single();
+                            transaction.IdeaTagRepo.Insert(new IdeaTag { IdeaId = CurrentIdea.IdeaId, TagId = newTag.Key });
+                        }
+
+                        transaction.Commit();
                     }
 
-                    // Initial save of tags. TODO: This may not be required if the inserted tags are just added to collection
-                    transaction.Commit();
-
-                    // reload all tags
-                    AllTags.Clear();
-                    IEnumerable<Tag> tags = transaction.TagRepo.GetByQuery();
-                    foreach (Tag tag in tags)
-                        AllTags.Add(tag.TagId, tag.TagName);
-
-                    // Insert/Update Idea
-                    if (IdeaId.HasValue)
-                        transaction.IdeaRepo.Update(CurrentIdea);
-                    else {
-                        CurrentIdea.Created = DateTime.Now;
-                        transaction.IdeaRepo.Insert(CurrentIdea);
-                    }
-
-                    // Delete from IdeaTags
-                    foreach (KeyValuePair<int, string> tag in DeletedTags)
-                    {
-                        IdeaTag itemToDelete = transaction.IdeaTagRepo.GetByQuery(it => it.IdeaId == CurrentIdea.IdeaId && it.TagId == tag.Key).FirstOrDefault();
-                        if (itemToDelete != null)
-                            transaction.IdeaTagRepo.Delete(itemToDelete);
-
-                        //TODO: Delete the tag entry if it's not used in any idea
-                    }
-
-                    // Insert into IdeaTags
-                    foreach (KeyValuePair<string, int?> tag in CurrentTags.Where(v => v.Value == null))
-                    {
-                        KeyValuePair<int, string> newTag = AllTags.Where(t => t.Value.Equals(tag.Key, StringComparison.CurrentCultureIgnoreCase)).Single();
-                        transaction.IdeaTagRepo.Insert(new IdeaTag { IdeaId = CurrentIdea.IdeaId, TagId = newTag.Key });
-                    }
-
-                    transaction.Commit();
+                    ts.Complete();
+                    (this.RootVM as ApplicationViewModel).AddNotification("Idea Saved", "Idea '" + currentIdea.Title + "' saved successfuly.");
                 }
 
-                ts.Complete();
+                if (this.LastVM != null)
+                    this.LastVM.NavigateTo();
             }
-
-            if (this.LastVM != null)
-                this.LastVM.NavigateTo();
+            catch (Exception exception)
+            {
+                IdeaCommon.HandleError(this.RootVM, exception);
+            }
         }
     }
 }

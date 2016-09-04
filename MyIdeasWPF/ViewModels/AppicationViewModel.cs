@@ -17,6 +17,7 @@ namespace Ideas.ViewModels
     {
         private ViewModel currentPageVM;
         private ViewModel quickLinksVM;
+        private NotificationViewModel notificationVM;
         private ICommand newIdeaCommand;
         private ICommand viewAllIdeasCmd;
 
@@ -44,6 +45,26 @@ namespace Ideas.ViewModels
                     OnPropertyChanged("QuickLinksVM");
                 }
             }
+        }
+
+        public NotificationViewModel NotificationVM
+        {
+            get { return notificationVM; }
+            set
+            {
+                if (value != notificationVM)
+                {
+                    notificationVM = value;
+                    OnPropertyChanged("NotificationVM");
+                }
+            }
+        }
+
+        public void AddNotification(string header, string text)
+        {
+            this.NotificationVM.NotificationHeader = header;
+            this.NotificationVM.NotificationText = text;
+            this.NotificationVM.Visibility = Constants.VisibilityVisible;
         }
 
         private void NewIdea()

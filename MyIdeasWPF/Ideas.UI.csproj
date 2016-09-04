@@ -66,13 +66,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utilities\Constants.cs" />
-    <Compile Include="Utilities\UICommon.cs" />
+    <Compile Include="Utilities\IdeaCommon.cs" />
     <Compile Include="Utilities\UtilityExtensions.cs" />
     <Compile Include="Utilities\ViewFactory.cs" />
     <Compile Include="Utilities\ViewInfrastructure.cs" />
     <Compile Include="Utilities\WeightedTag.cs" />
     <Compile Include="ViewModels\ActionCommand.cs" />
     <Compile Include="ViewModels\AppicationViewModel.cs" />
+    <Compile Include="ViewModels\NotificationViewModel.cs" />
     <Compile Include="ViewModels\ManageIdeasViewModel.cs" />
     <Compile Include="ViewModels\FruitfuldeasViewModel.cs" />
     <Compile Include="ViewModels\QuickLinksViewModel.cs" />
@@ -83,6 +84,9 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NotificationView.xaml.cs">
+      <DependentUpon>NotificationView.Xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ManageIdeasView.xaml.cs">
       <DependentUpon>ManageIdeasView.xaml</DependentUpon>
@@ -114,6 +118,10 @@
     <Page Include="Views\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotificationView.Xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ManageIdeasView.xaml">
       <Generator>MSBuild:Compile</Generator>

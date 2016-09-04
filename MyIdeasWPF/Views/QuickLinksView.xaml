@@ -29,12 +29,14 @@
             </Setter>
         </Style>
     </Control.Resources>
-    <Border Margin="1" BorderThickness="5" Background="BlanchedAlmond">
+    <Border Margin="1" BorderThickness="5" Background="CadetBlue" CornerRadius="5">
         <StackPanel Margin="3 3 3 3" Orientation="Vertical">
             <TextBlock Text="Quicklinks" FontSize="15"/>
             <Separator/>
             <Button Content="Go Back" Visibility="{Binding BackLnkVisibility}"
                 Command="{Binding CancelCommand}" Style="{StaticResource Link}"/>
+            <Button Content="Manage Ideas" Visibility="{Binding IdeasLnkVisibility}"
+                Command="{Binding ViewAllIdeasCommand}" Style="{StaticResource Link}"/>
         </StackPanel>
     </Border>
 </UserControl>
