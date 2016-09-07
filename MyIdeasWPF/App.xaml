@@ -4,6 +4,27 @@
              xmlns:local="clr-namespace:Ideas.UI"
              >
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="PanelBackground" Color="#877" />
+        
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderBrush" Value="DarkSalmon"/>
+        </Style>
+
+        <Style TargetType="{x:Type Label}" x:Key="HeaderText">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#cbb"/>
+        </Style>
+        
+        <Style x:Key="PanelBorder" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="{StaticResource PanelBackground}"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
     </Application.Resources>
 </Application>

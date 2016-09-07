@@ -102,6 +102,16 @@ namespace Ideas.ViewModels
         
         public string Visibility { get; private set; }
 
+        public string HeaderText
+        {
+            get
+            {
+                if (IdeaId == null) return String.Format("{0} {1}", Constants.TxtCreate, Constants.IdeaEntityTitle);
+
+                return String.Format("{0} {1}", Constants.TxtEdit, Constants.IdeaEntityTitle);
+            }
+        }
+
         public ICollection<string> StatusChoices
         {
             get { return StatusCollection.Values; }

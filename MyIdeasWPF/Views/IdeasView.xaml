@@ -8,25 +8,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance vm:IdeasViewModel}">
-    <StackPanel Margin="2 2 2 2">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <DataGrid ItemsSource="{Binding IdeasViewData}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedIdea}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Idea" Binding="{Binding Path=Idea.Title}" Width="*"></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Path=SecondDisplayColumn}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button ToolTip="View/Edit Idea" BorderThickness="0"  Command="{Binding Path=DataContext.EditIdeaCommand,
+        <DataGrid Margin="2 2 2 2" ItemsSource="{Binding IdeasViewData}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedIdea}" 
+                  ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Idea" Binding="{Binding Path=Idea.Title}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=SecondDisplayColumn}" Width="Auto"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button ToolTip="View/Edit Idea" BorderThickness="0"  Command="{Binding Path=DataContext.EditIdeaCommand,
                                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                  Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridCell}}}">
-                                    <Image Source="pack://application:,,,/Resources/Images/Edit-icon.png" Height="20" Width="15" />
-                                </Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </ScrollViewer>
-    </StackPanel>
+                                <Image Source="pack://application:,,,/Resources/Images/Edit-icon.png" Height="20" Width="15" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 </UserControl>

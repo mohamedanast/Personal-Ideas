@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance vm:PopularTagsViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
-        <Label Margin="2" Content="Most Used Tags" />
+        <Label Content="Most Used Tags" Style="{StaticResource HeaderText}" />
         <ItemsControl Margin="5 2 2 2" ItemsSource="{Binding PopularTags}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

@@ -53,11 +53,11 @@
         <!-- Notification area -->
         <ContentControl DockPanel.Dock="Bottom" Content="{Binding NotificationVM}"/>
 
-        <StackPanel Name="Quickinks" DockPanel.Dock="Right" MinWidth="110">
+        <StackPanel Name="Quickinks" Margin="3 5 5 5" DockPanel.Dock="Right" MinWidth="120">
             <ContentControl Content="{Binding QuickLinksVM}"/>
         </StackPanel>
 
-        <DockPanel DockPanel.Dock="Left">
+        <DockPanel DockPanel.Dock="Left" Margin="5 5 2 10">
             <ContentControl Content="{Binding CurrentPageVM}" DockPanel.Dock="Top"/>
         </DockPanel>
     </DockPanel>

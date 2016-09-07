@@ -12,81 +12,87 @@
         <KeyBinding Command="{Binding AssociateTagCommand}" Key="OemComma"
                     CommandParameter="{Binding ElementName=txtTagEdit, Path=Text}"/>
     </UserControl.InputBindings>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="100" />
-            <ColumnDefinition Width="*" MinWidth="120" />
-        </Grid.ColumnDefinitions>
-        
-        <!--Row 0: Idea Title-->
-        <TextBlock Text="Idea Title:" Margin="5 2 2 2"></TextBlock>
-        <TextBox Grid.Column="1" Text="{Binding CurrentIdea.Title}" 
-                 Margin="5 2 2 2" IsEnabled="{Binding IsEdit}"/>
+    <Border Style="{StaticResource PanelBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="*" MinWidth="120" />
+            </Grid.ColumnDefinitions>
 
-        <!--Row 1: Idea Desc-->
-        <TextBlock Grid.Row="1" Margin="5 2 2 2" Text="Description:"></TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentIdea.Description}" Height="50"
-                 Margin="5 2 2 2"  IsEnabled="{Binding IsEdit}" TextWrapping="Wrap" AcceptsReturn="True"/>
+            <!--Row 0: Header -->
+            <Label Grid.ColumnSpan="2" Style="{StaticResource HeaderText}" Content="{Binding HeaderText}"/>
 
-        <!--Row 2: Idea Tags-->
-        <TextBlock Grid.Row="2" Text="Tags:" Margin="5 2 2 2" ></TextBlock>
-        <StackPanel Grid.Row="2" Grid.Column="1" >
-            <TextBox Margin="5 2 2 2" Visibility="{Binding Visibility}"
+            <!--Row 1: Idea Title-->
+            <TextBlock Grid.Row="1" Text="Idea Title:" Margin="5 2 2 2"></TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentIdea.Title}" 
+                 Margin="5" IsEnabled="{Binding IsEdit}"/>
+
+            <!--Row 2: Idea Desc-->
+            <TextBlock Grid.Row="2" Margin="5 2 2 2" Text="Description:"></TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentIdea.Description}" Height="50"
+                 Margin="5"  IsEnabled="{Binding IsEdit}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+            <!--Row 3: Idea Tags-->
+            <TextBlock Grid.Row="3" Text="Tags:" Margin="5 2 2 2" ></TextBlock>
+            <StackPanel Grid.Row="3" Grid.Column="1" >
+                <TextBox Margin="5" Visibility="{Binding Visibility}"
                      x:Name="txtTagEdit" Text="{Binding TempStatusText, Mode=OneWay}" />
-            <ItemsControl Grid.Row="2" Grid.Column="1" Margin="5 2 2 2" IsEnabled="{Binding IsEdit}"
+                <ItemsControl Grid.Row="2" Grid.Column="1" Margin="5" IsEnabled="{Binding IsEdit}"
                  ItemsSource="{Binding TagsSelected}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="1" Background="LightBlue" Margin="5">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{TemplateBinding Content}"/>
-                                <Button Content="X" ToolTip="Remove Tag" Command="{Binding Path=DataContext.DisassociateTagCommand,
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="1" Background="LightBlue" Margin="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{TemplateBinding Content}"/>
+                                    <Button Content="X" ToolTip="Remove Tag" Command="{Binding Path=DataContext.DisassociateTagCommand,
                                     RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"                                    
                                     CommandParameter="{TemplateBinding Content}"
                                     Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.Visibility}"></Button>
-                        </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
 
-        <!--Row 3: Status-->
-        <TextBlock Grid.Row="3" Text="Status:" Margin="5 2 2 2" ></TextBlock>
-        <ListBox  Grid.Row="3" Grid.Column="1" Margin="5 2 2 2" IsEnabled="{Binding IsEdit}"
+            <!--Row 4: Status-->
+            <TextBlock Grid.Row="4" Text="Status:" Margin="5 2 2 2" ></TextBlock>
+            <ListBox  Grid.Row="4" Grid.Column="1" Margin="5" IsEnabled="{Binding IsEdit}"
                  ItemsSource="{Binding StatusChoices}"  SelectedItem="{Binding CurrentStatus}">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <RadioButton Content="{TemplateBinding Content}"
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <RadioButton Content="{TemplateBinding Content}"
                                      IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
 
-        <!--Row 4: Commands-->
-        <StackPanel Grid.Row="4" Grid.Column="1" Margin="5 2 2 2" Orientation="Horizontal">
-            <Button Margin="0 0 5 0" MinWidth="50" Visibility="{Binding Visibility}" 
+            <!--Row 5: Commands-->
+            <StackPanel Grid.Row="5" Grid.Column="1" Margin="5 2 2 2" Orientation="Horizontal">
+                <Button Margin="0 0 5 0" MinWidth="50" Visibility="{Binding Visibility}" 
                     Content="Save" Command="{Binding SaveIdeaCommand}" ></Button>
-            <Button Margin="0 0 5 0" MinWidth="50" Content="Cancel" Command="{Binding CancelCommand}" />
-        </StackPanel>
+                <Button Margin="0 0 5 0" MinWidth="50" Content="Cancel" Command="{Binding CancelCommand}" />
+            </StackPanel>
 
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

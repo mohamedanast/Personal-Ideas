@@ -27,20 +27,23 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Border Margin="1" BorderThickness="5" Background="CadetBlue" CornerRadius="6">
-            <StackPanel Margin="5" >
-                <TextBlock Text="Recent Ideas"></TextBlock>
+        <Border Style="{DynamicResource PanelBorder}">
+            <DockPanel LastChildFill="True">
+                <Label Content="Recent Ideas" DockPanel.Dock="Top" Style="{StaticResource HeaderText}"></Label>
                 <ContentControl Content="{Binding IdeasVM}" />
-            </StackPanel>
+            </DockPanel>
         </Border>
-        <Border Grid.Column="1" Margin="1" BorderThickness="5" Background="CadetBlue" CornerRadius="6">
-            <StackPanel Margin="5" >
-                <TextBlock Text="Fruitful Ideas"></TextBlock>
+        <Border Grid.Column="1" Style="{StaticResource PanelBorder}">
+            <DockPanel LastChildFill="True">
+                <Label Content="Fruitful Ideas" DockPanel.Dock="Top" Style="{StaticResource HeaderText}"></Label>
                 <ContentControl Content="{Binding FruitfulIdeasVM}" />
-            </StackPanel>
+            </DockPanel>
         </Border>
-        <Border Grid.Column="2" Grid.Row="2" Margin="1" BorderThickness="5" Background="CadetBlue" CornerRadius="6">
-            <ContentControl Margin="5" Content="{Binding PopularTagsVM}" />
+        <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource PanelBorder}">
+            <ContentControl Content="{Binding PopularTagsVM}" />
+        </Border>
+        <Border Grid.Row="1" Style="{StaticResource PanelBorder}">
+            <Label Style="{StaticResource HeaderText}" Content="Coming up: Idea Weekly Count Chart"/>
         </Border>
     </Grid>
 </UserControl>

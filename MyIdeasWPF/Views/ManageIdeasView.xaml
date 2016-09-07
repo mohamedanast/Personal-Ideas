@@ -8,36 +8,38 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance vm:ManageIdeasViewModel}">
-    <StackPanel Margin="5">
-        <TextBlock Text="Manage Ideas"/>
-        <DataGrid ItemsSource="{Binding IdeasViewData}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedIdea}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Idea" Binding="{Binding Path=Idea.Title}" Width="*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Status" Binding="{Binding Path=SecondDisplayColumn}" Width="Auto"></DataGridTextColumn>
-                <DataGridTextColumn Header="Created" Binding="{Binding Path=Idea.Created, StringFormat=d}" Width="Auto"></DataGridTextColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button ToolTip="View/Edit Idea" BorderThickness="0"  Command="{Binding Path=DataContext.EditIdeaCommand,
+    <Border Style="{StaticResource PanelBorder}">
+        <StackPanel>
+            <Label Style="{StaticResource HeaderText}" Content="Manage Ideas"/>
+            <DataGrid ItemsSource="{Binding IdeasViewData}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedIdea}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Idea" Binding="{Binding Path=Idea.Title}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Path=SecondDisplayColumn}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Created" Binding="{Binding Path=Idea.Created, StringFormat=d}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button ToolTip="View/Edit Idea" BorderThickness="0"  Command="{Binding Path=DataContext.EditIdeaCommand,
                                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                  Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridCell}}}">
-                                <Image Source="pack://application:,,,/Resources/Images/Edit-icon.png" Height="20" Width="15" />
-                            </Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button ToolTip="Archive Idea" BorderThickness="0"  Command="{Binding Path=DataContext.DeleteIdeaCommand,
+                                    <Image Source="pack://application:,,,/Resources/Images/Edit-icon.png" Height="20" Width="15" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button ToolTip="Archive Idea" BorderThickness="0"  Command="{Binding Path=DataContext.DeleteIdeaCommand,
                                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                  Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridCell}}}">
-                                <Image Source="pack://application:,,,/Resources/Images/Delete-icon.png" Height="20" Width="15" />
-                            </Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </StackPanel>
+                                    <Image Source="pack://application:,,,/Resources/Images/Delete-icon.png" Height="20" Width="15" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Border>
 </UserControl>

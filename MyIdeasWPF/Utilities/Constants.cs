@@ -12,5 +12,8 @@ namespace Ideas.UI.Utilities
         public const int TagBaseFontSize = 12;
         public const string VisibilityCollapsed = "Collapsed";
         public const string VisibilityVisible = "Visible";
+        public const string IdeaEntityTitle = "Idea";
+        public const string TxtEdit = "Edit";
+        public const string TxtCreate = "Create";
     }
 }
