@@ -29,6 +29,15 @@ namespace Ideas.ViewModels
             }
         }
 
+        public override void Refresh()
+        {
+            if (tags != null)
+            {
+                tags.Clear();
+                tags = null;
+            }
+        }
+
         protected virtual void GetTags()
         {
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())

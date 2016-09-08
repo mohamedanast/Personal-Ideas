@@ -56,5 +56,13 @@ namespace Ideas.ViewModels
                 return cancelCommand;
             }
         }
+
+        /// <summary>
+        /// Provides a means for refreshing the data, especially after a save. Nothing happens if behaviour is not overridden in subclass.
+        /// </summary>
+        public virtual void Refresh()
+        {
+
+        }
     }
 }

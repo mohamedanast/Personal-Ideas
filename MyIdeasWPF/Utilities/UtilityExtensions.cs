@@ -17,10 +17,8 @@ namespace Ideas.UI.Utilities
                 MainVM.CurrentPageVM = targetViewModel;
 
                 // Keep a copy of reference of last VM in quick links also
-                QuickLinksViewModel qlVM = MainVM.QuickLinksVM as QuickLinksViewModel;
-                qlVM.LastVM = targetViewModel.LastVM;
-                qlVM.BackLnkVisibility = Constants.VisibilityVisible;   // Just for triggering the OnPropertyChanged.
-                qlVM.IdeasLnkVisibility = Constants.VisibilityVisible;
+                MainVM.QuickLinksVM.LastVM = targetViewModel.LastVM;
+                MainVM.QuickLinksVM.Refresh();
             }
         }
 

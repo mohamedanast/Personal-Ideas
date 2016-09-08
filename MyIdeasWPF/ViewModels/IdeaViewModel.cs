@@ -291,7 +291,10 @@ namespace Ideas.ViewModels
                 }
 
                 if (this.LastVM != null)
+                {
+                    this.LastVM.Refresh();
                     this.LastVM.NavigateTo();
+                }
             }
             catch (Exception exception)
             {

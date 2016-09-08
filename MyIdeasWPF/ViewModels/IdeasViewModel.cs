@@ -40,7 +40,7 @@ namespace Ideas.ViewModels
         public IList<Idea> Ideas
         {
             get {
-                if (ideas == null) GetIdeas();  // TODO: Just for testing, remove & use commands instead
+                if (ideas == null) GetIdeas();
                 return ideas; }
             set
             {
@@ -56,7 +56,7 @@ namespace Ideas.ViewModels
         {
             get
             {
-                if (ideas == null) GetIdeas();  // TODO: Just for testing, remove & use commands instead
+                if (ideas == null) GetIdeas();
                 IEnumerable<IdeaView> ideasViewData = ideas.Select(idea => new IdeaView
                 {
                     Idea = idea,
@@ -83,8 +83,18 @@ namespace Ideas.ViewModels
             }
         }
 
+        public override void Refresh()
+        {
+            if (ideas != null)
+            {
+                ideas.Clear();
+                Ideas = null;   // Force Dependency Prop reoad and also idea reload. The other checks and clearing can be on the private variable.
+            }
+        }
+
         protected virtual void GetIdeas()
         {
+            // Retrieves latest ideas, overridden when other ideas are required
             using (IUnitOfWork transaction = DbFactory.GetUnitOfWork())
             {
                 ideas = transaction.IdeaRepo.GetByQuery(i => i.Status != (int)IdeaStatus.Archived, ideas => ideas.OrderByDescending(i=> i.Created) ).Take(10).ToList();
@@ -110,6 +120,11 @@ namespace Ideas.ViewModels
                     transaction.IdeaRepo.Update(selectedIdea);
                     transaction.Commit();
                     (this.RootVM as ApplicationViewModel).AddNotification("Idea Archived", "Idea '" + selectedIdea.Title + "' has been archived.");
+
+                    // Refresh current view. (Todo: Refresh not working on ideas view immediately)
+                    this.Refresh();
+                    // Refresh dashboard. What if LastVM is not dashboard?
+                    this.LastVM.Refresh();
                 }
             }
             catch (Exception exception)

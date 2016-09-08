@@ -37,6 +37,8 @@
                 Command="{Binding CancelCommand}" Style="{StaticResource Link}"/>
             <Button Margin="4" Content="Manage Ideas" Visibility="{Binding IdeasLnkVisibility}"
                 Command="{Binding ViewAllIdeasCommand}" Style="{StaticResource Link}"/>
+            <Button Margin="4" Content="Create Idea" Visibility="{Binding NewIdeaLnkVisibility}"
+                Command="{Binding NewIdeaCommand}" Style="{StaticResource Link}"/>
         </StackPanel>
     </Border>
 </UserControl>

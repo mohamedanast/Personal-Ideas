@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Ideas.UI.Views"
              xmlns:vm="clr-namespace:Ideas.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="350" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance vm:IdeaViewModel}">
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding AssociateTagCommand}" Key="OemComma"
@@ -31,21 +31,21 @@
             <Label Grid.ColumnSpan="2" Style="{StaticResource HeaderText}" Content="{Binding HeaderText}"/>
 
             <!--Row 1: Idea Title-->
-            <TextBlock Grid.Row="1" Text="Idea Title:" Margin="5 2 2 2"></TextBlock>
+            <TextBlock Grid.Row="1" Text="Idea Title:" Margin="5 8 2 2"></TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentIdea.Title}" 
-                 Margin="5" IsEnabled="{Binding IsEdit}"/>
+                 Margin="8" IsEnabled="{Binding IsEdit}"/>
 
             <!--Row 2: Idea Desc-->
-            <TextBlock Grid.Row="2" Margin="5 2 2 2" Text="Description:"></TextBlock>
+            <TextBlock Grid.Row="2" Margin="5 8 2 2" Text="Description:"></TextBlock>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentIdea.Description}" Height="50"
-                 Margin="5"  IsEnabled="{Binding IsEdit}" TextWrapping="Wrap" AcceptsReturn="True"/>
+                 Margin="8"  IsEnabled="{Binding IsEdit}" TextWrapping="Wrap" AcceptsReturn="True"/>
 
             <!--Row 3: Idea Tags-->
-            <TextBlock Grid.Row="3" Text="Tags:" Margin="5 2 2 2" ></TextBlock>
-            <StackPanel Grid.Row="3" Grid.Column="1" >
-                <TextBox Margin="5" Visibility="{Binding Visibility}"
+            <TextBlock Grid.Row="3" Text="Tags:" Margin="5 8 2 2" ></TextBlock>
+            <StackPanel Grid.Row="3" Grid.Column="1" Margin="8">
+                <TextBox Visibility="{Binding Visibility}"
                      x:Name="txtTagEdit" Text="{Binding TempStatusText, Mode=OneWay}" />
-                <ItemsControl Grid.Row="2" Grid.Column="1" Margin="5" IsEnabled="{Binding IsEdit}"
+                <ItemsControl Grid.Row="2" Grid.Column="1" Margin="2" IsEnabled="{Binding IsEdit}"
                  ItemsSource="{Binding TagsSelected}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -69,8 +69,8 @@
             </StackPanel>
 
             <!--Row 4: Status-->
-            <TextBlock Grid.Row="4" Text="Status:" Margin="5 2 2 2" ></TextBlock>
-            <ListBox  Grid.Row="4" Grid.Column="1" Margin="5" IsEnabled="{Binding IsEdit}"
+            <TextBlock Grid.Row="4" Text="Status:" Margin="5 8 2 2" ></TextBlock>
+            <ListBox  Grid.Row="4" Grid.Column="1" Margin="8" IsEnabled="{Binding IsEdit}"
                  ItemsSource="{Binding StatusChoices}"  SelectedItem="{Binding CurrentStatus}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
@@ -87,7 +87,7 @@
             </ListBox>
 
             <!--Row 5: Commands-->
-            <StackPanel Grid.Row="5" Grid.Column="1" Margin="5 2 2 2" Orientation="Horizontal">
+            <StackPanel Grid.Row="5" Grid.Column="1" Margin="8" Orientation="Horizontal">
                 <Button Margin="0 0 5 0" MinWidth="50" Visibility="{Binding Visibility}" 
                     Content="Save" Command="{Binding SaveIdeaCommand}" ></Button>
                 <Button Margin="0 0 5 0" MinWidth="50" Content="Cancel" Command="{Binding CancelCommand}" />

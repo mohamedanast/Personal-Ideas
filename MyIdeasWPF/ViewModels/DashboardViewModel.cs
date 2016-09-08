@@ -34,5 +34,13 @@ namespace Ideas.ViewModels
             FruitfulIdeasVM = fruitfulIdeasVM;
             PopularTagsVM = popularTagsVM;
         }
+
+        public override void Refresh()
+        {
+            // Refresh the individual parts
+            IdeasVM.Refresh();
+            FruitfulIdeasVM.Refresh();
+            PopularTagsVM.Refresh();
+        }
     }
 }
